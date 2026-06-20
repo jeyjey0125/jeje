@@ -14,7 +14,7 @@
 
 const CONFIG = {
   // ── 초대장 열기 ──
-  useCurtain: true,  // 초대장 열기 화면 사용 여부 (true: 사용, false: 바로 본문 표시)
+  useCurtain: false,  // 초대장 열기 화면 사용 여부 (true: 사용, false: 바로 본문 표시)
 
   // ── 메인 (히어로) ──
   groom: {
@@ -38,7 +38,7 @@ const CONFIG = {
   wedding: {
     date: "2026-12-06",
     time: "11:00",
-    venue: "JK아트컨벤션",
+    venue: "Jk아트컨벤션",
     hall: "아트리움홀 4층",
     address: "서울특별시 영등포구 문래로 164",
     tel: "02-2629-9100",
