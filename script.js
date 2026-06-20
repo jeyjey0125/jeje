@@ -438,28 +438,74 @@
      Gallery Section
      ═══════════════════════════════════════════ */
 
-  function initGallery(galleryImages) {
-    const grid = $('#galleryGrid');
-    // Remove loading placeholder if present
-    const placeholder = grid.querySelector('.loading-placeholder');
-    if (placeholder) placeholder.remove();
+function initGallery(galleryImages) {
+  const grid = $('#galleryGrid');
 
-    if (galleryImages.length === 0) {
-      // Hide gallery section if no images found
-      const gallerySection = $('#gallery');
-      if (gallerySection) gallerySection.style.display = 'none';
-      return;
-    }
+  const placeholder = grid.querySelector('.loading-placeholder');
+  if (placeholder) placeholder.remove();
 
+  if (galleryImages.length === 0) {
+    const gallerySection = $('#gallery');
+    if (gallerySection) gallerySection.style.display = 'none';
+    return;
+  }
+
+  const PREVIEW_COUNT = 9;
+
+  // 사진이 9장 이하라면 그냥 전부 표시
+  if (galleryImages.length <= PREVIEW_COUNT) {
     galleryImages.forEach((src, i) => {
       const div = document.createElement('div');
       div.className = 'gallery__item animate-item';
       div.setAttribute('data-animate', 'scale-in');
-      div.innerHTML = `<img src="${src}" alt="갤러리 사진 ${i + 1}" loading="lazy">`;
+
+      div.innerHTML = `
+        <img src="${src}" alt="갤러리 사진 ${i + 1}" loading="lazy">
+      `;
+
       div.addEventListener('click', () => openPhotoModal(galleryImages, i));
       grid.appendChild(div);
     });
+
+    return;
   }
+
+  // 처음 9장만 표시
+  galleryImages.slice(0, PREVIEW_COUNT).forEach((src, i) => {
+    const div = document.createElement('div');
+
+    div.className = 'gallery__item animate-item';
+    div.setAttribute('data-animate', 'scale-in');
+
+    // 마지막 칸
+    if (i === PREVIEW_COUNT - 1) {
+      const remainCount = galleryImages.length - PREVIEW_COUNT;
+
+      div.innerHTML = `
+        <div class="gallery-more-wrapper">
+          <img src="${src}" alt="갤러리 사진 ${i + 1}" loading="lazy">
+          <div class="gallery-more-overlay">
+            +${remainCount}
+          </div>
+        </div>
+      `;
+
+      div.addEventListener('click', () => {
+        openPhotoModal(galleryImages, PREVIEW_COUNT - 1);
+      });
+    } else {
+      div.innerHTML = `
+        <img src="${src}" alt="갤러리 사진 ${i + 1}" loading="lazy">
+      `;
+
+      div.addEventListener('click', () => {
+        openPhotoModal(galleryImages, i);
+      });
+    }
+
+    grid.appendChild(div);
+  });
+}
 
   /* ═══════════════════════════════════════════
      Photo Modal (with swipe)
